@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ET
-import f
-
+import func
+import numpy as np
 
 root_node = ET.parse('vasprun.xml').getroot()
 # for child in root_node:
@@ -33,6 +33,12 @@ for num, tag in enumerate(root_node.findall('calculation/eigenvalues/array/set/s
             # print(i.text)
 
 NBAND = 16
+
 #spliting one list to len(list) / NBAND shape
-mergedlist = list(f.list_split(bandlist, NBAND))
-print(mergedlist)
+mergedlist = list(func.list_split(bandlist, NBAND))
+
+with open('readme.txt', 'w') as f:
+    for i, (kpoint, band) in enumerate(zip(kpointslist, mergedlist),start=1):
+        f.writelines(kpoint + '        /' + str(i) + '\n')
+        f.writelines("".join(band)+'\n') # conver list to str
+        
