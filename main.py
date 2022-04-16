@@ -37,7 +37,7 @@ NBAND = 16
 #spliting one list to len(list) / NBAND shape
 mergedlist = list(func.list_split(bandlist, NBAND))
 
-with open('readme.txt', 'w') as f:
+with open('test.bnd', 'w') as f:
     for i, (kpoint, band) in enumerate(zip(kpointslist, mergedlist),start=1):
         f.writelines(kpoint + '        /' + str(i) + '\n')
         f.writelines("".join(band)+'\n') # conver list to str
