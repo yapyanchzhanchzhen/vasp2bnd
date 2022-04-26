@@ -1,15 +1,12 @@
 import xml.etree.ElementTree as ET
 import func
+import constant
 import numpy as np
 
 root_node = ET.parse('vasprun.xml').getroot()
-# for child in root_node:
-#     print(child.tag, child.attrib)
 
-for tag in root_node.findall('kpoints/varray'):
-    value = tag.get('name')
-    if value is not None: print(value)
-
+for child in root_node:
+    print(child.tag, child.attrib)
 
 #K-POINTS parsing
 kpointslist = []
@@ -21,7 +18,6 @@ for tag in root_node.findall('kpoints/varray'):
             kpointslist.append(i.text)
             # print(i.text)
 
-
 # BAND pasing
 bandlist = []
 
@@ -32,13 +28,10 @@ for num, tag in enumerate(root_node.findall('calculation/eigenvalues/array/set/s
             bandlist.append(i.text[:-9]) #append without ~1 
             # print(i.text)
 
-NBAND = 16
-
-#spliting one list to len(list) / NBAND shape
-mergedlist = list(func.list_split(bandlist, NBAND))
-
-with open('test.bnd', 'w') as f:
+#spliting one list to len(list)/NBANDS shape
+mergedlist = list(func.list_split(bandlist, int(constant.constantdict['NBANDS'])))
+with open('test.BND', 'w') as f:
     for i, (kpoint, band) in enumerate(zip(kpointslist, mergedlist),start=1):
         f.writelines(kpoint + '        /' + str(i) + '\n')
         f.writelines("".join(band)+'\n') # conver list to str
-        
+
