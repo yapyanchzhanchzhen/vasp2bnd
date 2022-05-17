@@ -1,7 +1,7 @@
 ####File with constant
 import xml.etree.ElementTree as ET
 
-root_node = ET.parse('vasprun_dos.xml').getroot()
+root_node = ET.parse('vasprun303015.xml').getroot()
 
 #PARSE ELECTRINIC CONSTANT
 constantdict = {}
