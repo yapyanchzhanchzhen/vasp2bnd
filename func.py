@@ -1,4 +1,4 @@
-
+'''Suporting functions'''
 def list_split(listA, n):
     for x in range(0, len(listA), n):
         every_chunk = listA[x: n+x]
