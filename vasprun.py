@@ -173,16 +173,22 @@ class Vasprun:
         self.__efermi = self.__efermi[0]
         
     def get_subdivision(self):
-        temp = []
+        self.subdivision = []
         for tag in self.root_node.findall('kpoints/generation/v'):
             key = tag.get('name')
             if key == 'genvec1':
-                temp.append(tag.text.split())
+                self.subdivision.append(list(map(float, tag.text.split())))
             elif key == 'genvec2':
-                temp.append(tag.text.split())
+                self.subdivision.append(list(map(float, tag.text.split())))
             elif key == 'genvec3':
-                temp.append(tag.text.split())
-        print(temp)
+                self.subdivision.append(list(map(float, tag.text.split())))
+        print(self.subdivision)
+
+        self.subdivision = np.asanyarray(self.subdivision)
+
+        self.h1=np.sqrt(np.sum(self.subdivision[0,:]**2))
+        self.h2=np.sqrt(np.sum(self.subdivision[1,:]**2))
+        self.h3=np.sqrt(np.sum(self.subdivision[2,:]**2))
         
                 
 
@@ -258,7 +264,9 @@ if __name__ == "__main__":
     # v.writefile('tets2')
     v = Vasp2Igor('ignore/vasprunrandom.xml')
     
-    
+    print(v.h1)
+    print(v.h2)
+    print(v.h3)
     # print(v.alpha, '\n', v.beta, '\n', v.gamma, '\n', v.a, '\n', v.b, '\n', v.c, '\n', v.b1, v.b2, v.b3)
     
     # N1 =14
