@@ -185,11 +185,13 @@ class Vasprun:
         print(self.subdivision)
 
         self.subdivision = np.asanyarray(self.subdivision)
-
         self.h1=np.sqrt(np.sum(self.subdivision[0,:]**2))
         self.h2=np.sqrt(np.sum(self.subdivision[1,:]**2))
         self.h3=np.sqrt(np.sum(self.subdivision[2,:]**2))
-        
+
+        self.N1 = int((self.b1*3)/self.h1)
+        self.N2 = int((self.b2*3)/self.h2)
+        self.N3 = int((self.b3*3)/self.h3)
                 
 
 
@@ -262,11 +264,11 @@ if __name__ == "__main__":
     # v.get_eigenvalues()
     # v.get_structure()
     # v.writefile('tets2')
-    v = Vasp2Igor('ignore/vasprunrandom.xml')
+    v = Vasp2Igor('ignore/vasprun14127.xml')
     
-    print(v.h1)
-    print(v.h2)
-    print(v.h3)
+    print(v.N1)
+    print(v.N2)
+    print(v.N3)
     # print(v.alpha, '\n', v.beta, '\n', v.gamma, '\n', v.a, '\n', v.b, '\n', v.c, '\n', v.b1, v.b2, v.b3)
     
     # N1 =14
@@ -275,8 +277,9 @@ if __name__ == "__main__":
 
     # print(v.b1/N1*3)
     # print(v.b2/N2*3)
-    # print(v.b2/N3*3)
+    # print(v.b3/N3*3)
     
     
     # print(int((v.b1*3)/0.0726))
-    # print(int((v.b2*3)/0.084729995))
+    # print(int((v.b2*3)/0.08333333))
+    
