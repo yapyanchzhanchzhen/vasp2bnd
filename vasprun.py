@@ -24,8 +24,6 @@ class Vasprun:
         self.__eigenvalues = []
         self.__kpoints = []
 
-        self.__get_efermi()
-
     @property
     def a(self):
         return self.__a
@@ -68,16 +66,16 @@ class Vasprun:
         Parsing of structural constants 
         """
         
-        for tag in self.root_node.findall('structure/crystal/varray'):
-            value = tag.get('name')
-            if value == 'basis':
-                for v, i in enumerate(tag.findall('v'), start=0):
-                    self.__basis.append(list(map(float ,i.text.split())))
-                continue
-            elif value == 'rec_basis':
-                for i in tag.findall('v'):
-                    self.__recbasis.append(list(map(float ,i.text.split())))
-                break
+        for tag in self.root_node.findall('structure'):
+            if tag.get('name') == 'finalpos':
+                value = tag.findall('crystal/varray')
+                for i in value:
+                    if i.get('name') == 'basis':
+                        for j in i:
+                            self.__basis.append(list(map(float ,j.text.split())))
+                    elif i.get('name') == 'rec_basis':
+                        for j in i:
+                            self.__recbasis.append(list(map(float ,j.text.split())))  
 
         # BASIS, LATTIECE CONSTANT 
         self.__basis = np.asanyarray(self.__basis)
@@ -143,7 +141,7 @@ class Vasprun:
 
 
     def get_electronicparam(self):
-        """_parsing of electronic parameters_
+        """_parsing of electronic parameters for bandtransform function_
 
         Returns:
             _dict_: _string_
@@ -169,17 +167,23 @@ class Vasprun:
         print("Be careful!\nYou're changing the efermi\n")
         self.__efermi = value
 
-    def __get_efermi(self):
+    def get_efermi(self):
         self.__efermi = self.root_node.findall('calculation/dos/i')
         self.__efermi = [float(i.text) for i in self.__efermi]
         self.__efermi = self.__efermi[0]
         
+    def get_subdivision(self):
+        temp = []
+        for tag in self.root_node.findall('kpoints/generation/v'):
+            key = tag.get('name')
+            if key == 'genvec1':
+                temp.append(tag.text.split())
+            elif key == 'genvec2':
+                temp.append(tag.text.split())
+            elif key == 'genvec3':
+                temp.append(tag.text.split())
+        print(temp)
         
-
-            # value = tag.get('name')
-            # if value == 'self.__efermi':
-            #     value = tag.findall('i')
-            #     print(value.text)
                 
 
 
@@ -190,7 +194,13 @@ class Vasp2Igor(Vasprun):
     """
     def __init__(self, vaspfile):
         super().__init__(vaspfile)
-        self.__self.__reduced_basis = 0
+        super().get_structure()
+        super().get_efermi()
+        super().get_eigenvalues()
+        super().get_kpoints()
+        super().get_electronicparam()
+        super().get_subdivision()
+        
 
 
     def reducebasis(self):
@@ -246,11 +256,19 @@ if __name__ == "__main__":
     # v.get_eigenvalues()
     # v.get_structure()
     # v.writefile('tets2')
-    v = Vasprun('ignore/vasprunrandom.xml')
-    v.get_structure()
-
+    v = Vasp2Igor('ignore/vasprunrandom.xml')
     
+    
+    # print(v.alpha, '\n', v.beta, '\n', v.gamma, '\n', v.a, '\n', v.b, '\n', v.c, '\n', v.b1, v.b2, v.b3)
+    
+    # N1 =14
+    # N2 =12
+    # N3 =7
 
-
-        
- 
+    # print(v.b1/N1*3)
+    # print(v.b2/N2*3)
+    # print(v.b2/N3*3)
+    
+    
+    # print(int((v.b1*3)/0.0726))
+    # print(int((v.b2*3)/0.084729995))
