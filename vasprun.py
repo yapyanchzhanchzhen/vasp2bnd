@@ -94,8 +94,7 @@ class Vasprun:
         #Angl of lattiece
         self.__alpha = np.arccos(np.dot(self.__basis[1,:],self.__basis[2,:])/self.__b/self.__c)*360/2/np.pi
         self.__beta  = np.arccos(np.dot(self.__basis[0,:],self.__basis[2,:])/self.__a/self.__c)*360/2/np.pi
-        self.__gamma = np.arccos(np.dot(self.__basis[0,:],self.__basis[1,:])/self.__a/self.__b)*360/2/np.pi
-        
+        self.__gamma = np.arccos(np.dot(self.__basis[0,:],self.__basis[1,:])/self.__a/self.__b)*360/2/np.pi 
 
 
     @property
